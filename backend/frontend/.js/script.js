@@ -42,7 +42,6 @@ const createMessageOtherElement = (content, sender,senderColor)=>{
     span.innerHTML = `${sender}</br>`;
     div.innerHTML += content
     
-
     return div
 }
 
@@ -51,13 +50,30 @@ const geteRandomColor = ()=>{
     return colors[randomIndex]
 }
 
-const processMessage = ({data})=> {
-    const {userId, userName, userColor, content}=JSON.parse(data)
-    const message = userId == user.id ? createMessageSelfElement(content) : createMessageOtherElement = (content, sender,senderColor)
-
-    chatMessages.appendChild(message)
+const scrollScreen = ()=>{
+    window.scrollTo({
+        top: document.body.scrollHeight, 
+        behavior: "smooth"
+    })
 }
 
+const processMessage = ({data})=> {
+    console.log(data)
+    const { userId, userName, userColor, content } = JSON.parse(data)
+    if(userId == user.id){
+        const message = createMessageSelfElement(content)
+    } else {const message =  createMessageOtherElement(content, userName, userColor)
+
+    }
+    // const message = userId == user.id
+    // ? createMessageSelfElement(content)
+    // : createMessageOtherElement(content, userName, userColor)
+
+    chatMessages.appendChild(message)
+
+    scrollScreen()
+}
+ 
 const handleLogin = (event)=>{
     event.preventDefault();
     user.id= crypto.randomUUID()
@@ -84,6 +100,8 @@ const sendMessage = (event) => {
 
     websocket.send(JSON.stringify(message))
     chatInput.value = ""
+    // será que falta o retorno de message
+    return message
 }
 
 loginForm.addEventListener("submit", handleLogin);
