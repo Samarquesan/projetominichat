@@ -1,7 +1,9 @@
+//login elements
 const login = document.querySelector(".login");
 const loginForm = login.querySelector(".login__form");
 const loginInput = login.querySelector(".login__input");
 
+//chat elements
 const chat = document.querySelector(".chat");
 const chatForm = chat.querySelector(".chat__form");
 const chatInput = chat.querySelector(".chat__input");
@@ -13,6 +15,7 @@ const colors = [
     "chocolate", 
     "darkgoldenrod", 
     "hotpink",
+    "gold",
     "cornflowerblue"
 ]
 
@@ -46,7 +49,7 @@ const createMessageOtherElement = (content, sender,senderColor)=>{
 }
 
 const geteRandomColor = ()=>{
-    const randomIndex =Math.floor(Math.random()* colors.length)
+    const randomIndex = Math.floor(Math.random()* colors.length)
     return colors[randomIndex]
 }
 
@@ -57,18 +60,13 @@ const scrollScreen = ()=>{
     })
 }
 
-const processMessage = ({data})=> {
+const processMessage = ({ data })=> {
     console.log(data)
     const { userId, userName, userColor, content } = JSON.parse(data)
-    if(userId == user.id){
-        const message = createMessageSelfElement(content)
-    } else {const message =  createMessageOtherElement(content, userName, userColor)
-
-    }
-    // const message = userId == user.id
-    // ? createMessageSelfElement(content)
-    // : createMessageOtherElement(content, userName, userColor)
-
+    const message = userId == user.id
+    ? createMessageSelfElement(content)
+    : createMessageOtherElement(content, userName, userColor)
+    
     chatMessages.appendChild(message)
 
     scrollScreen()
@@ -82,7 +80,7 @@ const handleLogin = (event)=>{
 
     login.style.display = "none"
     chat.style.display = "flex"
-
+    
     websocket = new WebSocket("ws://localhost:8080")
     websocket.onmessage = processMessage
 
