@@ -61,7 +61,7 @@ const scrollScreen = ()=>{
 }
 
 const processMessage = ({ data })=> {
-    console.log(data)
+    
     const { userId, userName, userColor, content } = JSON.parse(data)
     const message = userId == user.id
     ? createMessageSelfElement(content)
@@ -98,7 +98,7 @@ const sendMessage = (event) => {
 
     websocket.send(JSON.stringify(message))
     chatInput.value = ""
-    // será que falta o retorno de message
+    
     return message
 }
 
